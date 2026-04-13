@@ -299,6 +299,7 @@ const state = {
 };
 
 let persistTimer = null;
+let clearPublishHighlightListeners = null;
 
 const dropzone = document.getElementById("dropzone");
 const appTitle = document.getElementById("appTitle");
@@ -362,6 +363,30 @@ function setStatus(message, isError = false) {
   if (isError) {
     console.error(message);
   }
+}
+
+function highlightPublishButton() {
+  if (!publishPluginBtn) {
+    return;
+  }
+  publishPluginBtn.classList.add("publish-highlight");
+  if (clearPublishHighlightListeners) {
+    clearPublishHighlightListeners();
+  }
+
+  const clear = () => {
+    publishPluginBtn.classList.remove("publish-highlight");
+    document.removeEventListener("keydown", onKeyDown, true);
+    document.removeEventListener("pointerdown", onPointerDown, true);
+    clearPublishHighlightListeners = null;
+  };
+
+  const onKeyDown = () => clear();
+  const onPointerDown = () => clear();
+
+  document.addEventListener("keydown", onKeyDown, true);
+  document.addEventListener("pointerdown", onPointerDown, true);
+  clearPublishHighlightListeners = clear;
 }
 
 function applyStaticTranslations() {
@@ -1910,7 +1935,8 @@ intro: |
 
 presets:
   water_vending:
-    terms: [water, вод]
+    name: "💦 Water vending"
+    terms: [water, вод, вода, воды, vending, автомат]
     icon: droplet.svg
     tags:
       amenity: vending_machine
@@ -1922,11 +1948,11 @@ presets:
       - '@amenity/vending_machine'
 
 imagery:
-  osm_overzoom:
-    name: "osm_zoom"
-    url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-    maxZoom: 123
-    attribution: "OpenStreetMap contributors"
+  opentopomap:
+    name: "opentopomap"
+    url: "https://{switch:a,b,c}.tile.opentopomap.org/{z}/{x}/{y}.png"
+    maxZoom: 19
+    attribution: "OpenTopoMap"
 
 overlays:
   - url: "https://gps.tile.openstreetmap.org/lines/{z}/{x}/{y}.png"
@@ -1939,6 +1965,12 @@ overlays:
     attribution: "WaymarkedTrails.org"
 
 modes:
+  amenity:
+    kinds:
+      water_vending:
+        matcher:
+          vending:
+            only: [ water ]
   # define new mode button
   advertising:                
     type: entrances
@@ -1972,14 +2004,21 @@ modes:
         matcher:
           highway:
             only: [ street_lamp ]
+      water_vending:
+        matcher:
+          vending:
+            only: [ water ]
     defaultPresets:
       - advertising/billboard
       - highway/street_lamp
+      - vending/water
     markers:
       advertising/billboard:
         icon: billboard.svg
       highway/street_lamp:
         icon: street_lamp.svg
+      vending/water:
+        icon: droplet.svg
 
 kinds:
   # ¯\\_(ツ)_/¯ 
@@ -2012,6 +2051,10 @@ kinds:
     matcher:
       highway:
         only: [street_lamp]
+  water_vending:
+    matcher:
+      vending:
+        only: [water]
   micro:
     kinds:
       billboard:
@@ -2025,22 +2068,25 @@ kinds:
     defaultPresets:
       - advertising/billboard
       - highway/street_lamp
+      - vending/water
     markers:
       advertising/billboard:
         icon: billboard.svg
+      vending/water:
+        icon: droplet.svg
 
 `;
   const englishYaml = `name: "Example Plugin"
 description: "Demo plugin created in Web plugin editor."
 presets:
   water_vending:
-    name: "Water vending machine"
+    name: "💦 Water vending machine"
 `;
   const russianYaml = `name: "Пример плагина"
 description: "Демо-плагин, созданный в веб-редакторе плагинов."
 presets:
   water_vending:
-    name: "Автомат по продаже воды"
+    name: "💦 Автомат по продаже воды"
 `;
 
   state.archiveName = t("sample_archive_name");
@@ -2812,6 +2858,7 @@ downloadBtn.addEventListener("click", async () => {
     anchor.click();
     anchor.remove();
     URL.revokeObjectURL(url);
+    highlightPublishButton();
   } catch (error) {
     setStatus(t("error_export_archive", { message: error.message }), true);
   }

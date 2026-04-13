@@ -85,6 +85,13 @@ code {
   background: #1a3344;
 }
 
+.open-plugin-btn.publish-highlight {
+  background: #00b0f6;
+  border-color: #53d2ff;
+  color: #032235;
+  box-shadow: 0 0 0 2px rgba(0, 176, 246, 0.28);
+}
+
 .open-another-wrap {
   position: relative;
 }
