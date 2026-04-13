@@ -61,6 +61,7 @@ const PLUGIN_TOP_LEVEL_KEYS = new Set([
   "modes",
   "imagery",
   "overlays",
+  "presets",
 ]);
 const PLUGIN_ID_PATTERN = /^[A-Za-z0-9_-]+$/;
 const PINHEAD_BILLBOARD_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" fill="currentColor">
@@ -69,6 +70,10 @@ const PINHEAD_BILLBOARD_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="
 `;
 const PINHEAD_STREET_LAMP_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" fill="currentColor">
   <path d="M6 12L7 12C7.55 12 8 12.45 8 13L8 14L2 14L2 13C2 12.45 2.45 12 3 12L4 12L4 4C4 2.34 5.34 1 7 1L13 1L13 3C13 4.1 12.1 5 11 5L10 5C8.9 5 8 4.1 8 3L7.5 3C6.67 3 6 3.67 6 4.5L6 12ZM9 2L9 3C9 3.55 9.45 4 10 4L11 4C11.55 4 12 3.55 12 3L12 2L9 2L9 2Z"/>
+</svg>
+`;
+const PINHEAD_DROPLET_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15">
+  <path d="M7.5 14C9.58 14 12 12.71 12 9.43C12 7.21 8.54 2.29 7.5 1C6.58 2.29 3 7.09 3 9.43C3 12.71 5.42 14 7.5 14Z"/>
 </svg>
 `;
 
@@ -1903,6 +1908,19 @@ intro: |
 
   Installed from the [editor](https://github.com/deevroman/every-door-plugin-web-editor) starter template.
 
+presets:
+  water_vending:
+    terms: [water, вод]
+    icon: droplet.svg
+    tags:
+      amenity: vending_machine
+      vending: water
+    addTags:
+      amenity: vending_machine
+      vending: water
+    fields:
+      - '@amenity/vending_machine'
+
 imagery:
   osm_overzoom:
     name: "osm_zoom"
@@ -2013,7 +2031,16 @@ kinds:
 
 `;
   const englishYaml = `name: "Example Plugin"
-description: "Demo plugin created in EveryDoor Plugin Editor."
+description: "Demo plugin created in Web plugin editor."
+presets:
+  water_vending:
+    name: "Water vending machine"
+`;
+  const russianYaml = `name: "Пример плагина"
+description: "Демо-плагин, созданный в веб-редакторе плагинов."
+presets:
+  water_vending:
+    name: "Автомат по продаже воды"
 `;
 
   state.archiveName = t("sample_archive_name");
@@ -2022,16 +2049,20 @@ description: "Demo plugin created in EveryDoor Plugin Editor."
 
   const pluginRecord = createRecordFromBytes("plugin.yaml", textEncoder.encode(pluginYaml), "text/yaml");
   const langRecord = createRecordFromBytes("langs/en.yaml", textEncoder.encode(englishYaml), "text/yaml");
+  const ruLangRecord = createRecordFromBytes("langs/ru.yaml", textEncoder.encode(russianYaml), "text/yaml");
   const billboardRecord = createRecordFromBytes("icons/billboard.svg", textEncoder.encode(PINHEAD_BILLBOARD_SVG), "image/svg+xml");
   const streetLampRecord = createRecordFromBytes(
     "icons/street_lamp.svg",
     textEncoder.encode(PINHEAD_STREET_LAMP_SVG),
     "image/svg+xml",
   );
+  const dropletRecord = createRecordFromBytes("icons/droplet.svg", textEncoder.encode(PINHEAD_DROPLET_SVG), "image/svg+xml");
   state.files.set(pluginRecord.path, pluginRecord);
   state.files.set(langRecord.path, langRecord);
+  state.files.set(ruLangRecord.path, ruLangRecord);
   state.files.set(billboardRecord.path, billboardRecord);
   state.files.set(streetLampRecord.path, streetLampRecord);
+  state.files.set(dropletRecord.path, dropletRecord);
 
   state.originalFilePaths = new Set(state.files.keys());
   state.originalFolders = getAllFolderPaths();
@@ -2863,6 +2894,15 @@ document.addEventListener("click", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
+  const isSaveShortcut = (event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === "s";
+  if (isSaveShortcut) {
+    event.preventDefault();
+    if (!downloadBtn.disabled) {
+      downloadBtn.click();
+    }
+    return;
+  }
+
   if (event.key === "Escape") {
     closeOpenAnotherMenu();
   }
