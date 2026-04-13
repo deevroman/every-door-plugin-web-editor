@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EveryDoor Plugin Web Editor</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <h1 id="appTitle">EveryDoor Plugin Editor</h1>
+        <div class="topbar-actions">
+          <button id="docsBtn" class="open-plugin-btn" type="button">Plugin Docs</button>
+          <button id="publishPluginBtn" class="open-plugin-btn" type="button">Publish Plugin</button>
+          <div class="open-another-wrap">
+            <button id="openAnotherBtn" class="open-plugin-btn" type="button" aria-haspopup="menu" aria-expanded="false">
+              Open Another Plugin
+            </button>
+            <div id="openAnotherMenu" class="open-another-menu hidden" role="menu">
+              <button id="openArchiveFileBtn" class="menu-item-btn" type="button" role="menuitem">Open Archive File</button>
+              <button id="openArchiveLinkBtn" class="menu-item-btn" type="button" role="menuitem">Download by Link</button>
+              <button id="openGithubRepoBtn" class="menu-item-btn" type="button" role="menuitem">Open GitHub Repository Files</button>
+              <button id="openTemplateBtn" class="menu-item-btn" type="button" role="menuitem">Create from Template</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section id="dropzone" class="dropzone" aria-label="Drop plugin archive">
+        <div class="dropzone-content">
+          <p id="dropzoneTitle" class="dropzone-title">Drop <code>.edp</code> or <code>.zip</code> file here</p>
+          <p id="dropzoneSubtitle" class="dropzone-subtitle">or click to choose from your device</p>
+          <button id="createSampleBtn" class="create-sample-btn" type="button">Create Example Plugin</button>
+          <input id="fileInput" type="file" accept=".edp,.zip,application/zip" hidden />
+        </div>
+      </section>
+
+      <section id="workspace" class="workspace hidden" aria-live="polite">
+        <aside class="sidebar">
+          <div class="sidebar-header">
+            <div class="sidebar-title-row">
+              <h2 id="sidebarTitle">Archive Files</h2>
+              <button id="addRootBtn" class="icon-btn" type="button" title="Create file or folder">+</button>
+            </div>
+            <p id="archiveName" class="archive-name">No archive</p>
+          </div>
+          <nav id="fileTree" class="file-tree" aria-label="Archive file tree"></nav>
+          <button id="downloadBtn" class="download-btn" disabled>Download archive</button>
+        </aside>
+        <div id="panelResizer" class="panel-resizer" role="separator" aria-orientation="vertical" aria-label="Resize panels"></div>
+
+        <section class="content">
+          <div class="content-header">
+            <div class="content-title-row">
+              <h2 id="activeFileName">Select a file</h2>
+              <div class="content-actions">
+                <label id="previewColorControl" class="preview-color-control hidden" for="previewColorInput">
+                  <span id="previewColorLabel">Preview Color</span>
+                  <input id="previewColorInput" type="color" value="#ffffff" />
+                </label>
+                <button id="revertFileBtn" class="revert-btn" type="button" disabled>Undo File Changes</button>
+              </div>
+            </div>
+            <span id="fileMeta" class="file-meta"></span>
+          </div>
+
+          <div id="editorPane" class="pane hidden">
+            <div class="code-editor">
+              <div id="textEditor" class="cm-host" aria-label="File editor"></div>
+            </div>
+          </div>
+
+          <div id="imagePane" class="pane hidden">
+            <div class="preview-canvas">
+              <img id="imagePreview" alt="Selected file preview" />
+            </div>
+          </div>
+
+          <div id="svgPane" class="pane hidden">
+            <div class="svg-grid">
+              <div class="code-editor">
+                <div id="svgEditor" class="cm-host" aria-label="SVG editor"></div>
+              </div>
+              <div
+                id="svgPaneResizer"
+                class="svg-pane-resizer"
+                role="separator"
+                aria-orientation="vertical"
+                aria-label="Resize SVG preview panel"
+              ></div>
+              <div class="preview-canvas">
+                <img id="svgPreview" alt="SVG preview" />
+              </div>
+            </div>
+          </div>
+
+          <div id="binaryPane" class="pane hidden">
+            <p id="binaryTitle">This file type cannot be edited here.</p>
+            <p id="binaryHint" class="binary-hint">You can keep it unchanged and include it in exported archive.</p>
+          </div>
+
+          <div id="emptyPane" class="pane">
+            <p id="emptyHint">Select a file from the list to start editing.</p>
+          </div>
+        </section>
+      </section>
+
+    </main>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
