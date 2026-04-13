@@ -1887,8 +1887,8 @@ function updateFileEditingState() {
 function createSamplePlugin() {
   clearState();
 
-  const pluginYaml = `id: example_plugin
-name: "Example Plugin"
+  const pluginYaml = `id: example_plugin_rename_me
+name: "Example Plugin (rename me!)"
 version: 1.0
 description: |
   Demo plugin created in EveryDoor Plugin Editor.
@@ -1897,11 +1897,11 @@ description: |
 author: "deevroman"
 icon: "billboard.svg"
 experimental: true 
-homepage: "https://github.com/deevromand/ed-editor"
+homepage: "https://github.com/deevroman/every-door-plugin-web-editor"
 intro: |
   # Example plugin
 
-  Installed **from the editor starter template**.
+  Installed from the [editor](https://github.com/deevroman/every-door-plugin-web-editor) starter template.
 
 imagery:
   osm_overzoom:
@@ -1920,8 +1920,51 @@ overlays:
     maxZoom: 17  
     attribution: "WaymarkedTrails.org"
 
-    
+modes:
+  # define new mode button
+  advertising:                
+    type: entrances
+    icon: billboard.svg
+    name: Advertising
+    kinds: [billboard, street_lamp]
+    markers:
+      billboard:
+        requiredKeys: [advertising]
+      street_lamp:
+        requiredKeys: [highway, lamp_type]
+        label: "{lamp_type}"
+    primary:
+      icon: billboard.svg
+      tooltip: Billboard
+      adjustZoom: 0.7
+      preset: advertising/billboard
+    secondary:
+      icon: street_lamp.svg
+      tooltip: Street lamp
+      adjustZoom: 0.7
+      preset: highway/street_lamp
+  # define news icons on map in micromapping mode
+  micro:
+    kinds:
+      billboard:
+        matcher:
+          advertising:
+            only: [ billboard ]
+      street_lamp:
+        matcher:
+          highway:
+            only: [ street_lamp ]
+    defaultPresets:
+      - advertising/billboard
+      - highway/street_lamp
+    markers:
+      advertising/billboard:
+        icon: billboard.svg
+      highway/street_lamp:
+        icon: street_lamp.svg
+
 kinds:
+  # ¯\\_(ツ)_/¯ 
   advertising:
     type: entrances
     icon: billboard.svg
@@ -1961,58 +2004,6 @@ kinds:
         matcher:
           highway:
             only: [ street_lamp ]
-      poles:
-        matcher:
-          power:
-            only: [ pole ]
-      surveillance:
-        matcher:
-          man_made:
-            only: [ surveillance ]
-    defaultPresets:
-      - advertising/billboard
-      - highway/street_lamp
-    markers:
-      advertising/billboard:
-        icon: billboard.svg
-
-modes:
-  advertising:
-    type: entrances
-    icon: billboard.svg
-    name: Advertising
-    kinds: [billboard, street_lamp]
-    markers:
-      billboard:
-        requiredKeys: [advertising]
-      street_lamp:
-        requiredKeys: [highway, lamp_type]
-        label: "{lamp_type}"
-    primary:
-      icon: billboard.svg
-      tooltip: Billboard
-      adjustZoom: 0.7
-      preset: advertising/billboard
-    secondary:
-      icon: street_lamp.svg
-      tooltip: Street lamp
-      adjustZoom: 0.7
-      preset: highway/street_lamp
-
-  micro:
-    kinds:
-      billboard:
-        matcher:
-          advertising:
-            only: [ billboard ]
-      street_lamp:
-        matcher:
-          highway:
-            only: [ street_lamp ]
-      poles:
-        matcher:
-          power:
-            only: [ pole ]
     defaultPresets:
       - advertising/billboard
       - highway/street_lamp
