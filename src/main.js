@@ -62,6 +62,7 @@ const PLUGIN_TOP_LEVEL_KEYS = new Set([
   "imagery",
   "overlays",
   "presets",
+  "fields",
 ]);
 const PLUGIN_ID_PATTERN = /^[A-Za-z0-9_-]+$/;
 const PINHEAD_BILLBOARD_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" fill="currentColor">
