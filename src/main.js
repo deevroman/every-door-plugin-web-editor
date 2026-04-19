@@ -1921,10 +1921,7 @@ function createSamplePlugin() {
   const pluginYaml = `id: example_plugin_rename_me
 name: "Example Plugin (rename me!)"
 version: 1.0
-description: |
-  Demo plugin created in EveryDoor Plugin Editor.
-
-  Contains sample imagery and icon resources.
+description: "Demo plugin created in EveryDoor Plugin Editor."
 author: "deevroman"
 icon: "billboard.svg"
 experimental: true 

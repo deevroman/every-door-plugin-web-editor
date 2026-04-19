@@ -663,6 +663,42 @@ body.resizing-svg-pane {
 }
 
 @media (max-width: 900px) {
+  .app {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .topbar {
+    justify-content: flex-end;
+    height: auto;
+    min-height: 40px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+
+  .topbar h1 {
+    display: none;
+  }
+
+  .topbar-actions {
+    align-items: stretch;
+  }
+
+  .topbar-actions > .open-plugin-btn,
+  .topbar-actions > .open-another-wrap {
+    display: flex;
+  }
+
+  .topbar-actions .open-plugin-btn {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .topbar-actions > .open-another-wrap > .open-plugin-btn {
+    height: 100%;
+  }
+
   .workspace {
     grid-template-columns: 1fr;
     grid-template-rows: auto minmax(0, 1fr);
@@ -686,7 +722,8 @@ body.resizing-svg-pane {
   }
 
   .sidebar.sidebar-collapsed-mobile .file-tree,
-  .sidebar.sidebar-collapsed-mobile .download-btn {
+  .sidebar.sidebar-collapsed-mobile .download-btn,
+  .sidebar.sidebar-collapsed-mobile .archive-name {
     display: none;
   }
 
@@ -696,6 +733,10 @@ body.resizing-svg-pane {
 
   .svg-grid {
     grid-template-columns: 1fr;
+  }
+
+  .pane {
+    padding: 5px;
   }
 
   .svg-pane-resizer {
