@@ -709,6 +709,27 @@ body.resizing-svg-pane {
     align-self: start;
   }
 
+  .sidebar-header h2 {
+    position: relative;
+  }
+
+  .sidebar-header h2::before {
+    content: "▾";
+    position: absolute;
+    left: -12px;
+    top: 50%;
+    color: var(--muted);
+    font-size: 0.82em;
+    line-height: 1;
+    transform: translateY(-50%);
+    transform-origin: 50% 50%;
+    transition: transform 0.16s ease;
+  }
+
+  .sidebar.sidebar-collapsed-mobile .sidebar-header h2::before {
+    transform: translateY(-50%) rotate(-90deg);
+  }
+
   .panel-resizer {
     display: none;
   }
@@ -737,6 +758,10 @@ body.resizing-svg-pane {
 
   .file-meta:empty {
     display: none;
+  }
+
+  .cm-host .cm-editor .cm-content {
+    padding-left: 0 !important;
   }
 
   .pane {
