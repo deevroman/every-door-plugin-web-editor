@@ -735,6 +735,10 @@ body.resizing-svg-pane {
     grid-template-columns: 1fr;
   }
 
+  .file-meta:empty {
+    display: none;
+  }
+
   .pane {
     padding: 5px;
   }

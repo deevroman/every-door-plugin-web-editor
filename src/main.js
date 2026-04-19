@@ -114,6 +114,7 @@ const I18N = {
     meta_binary: "Binary file",
     meta_modified: "{base} • modified",
     meta_modified_short: "modified",
+    confirm_revert_file: 'Discard changes in "{path}"?',
     error_protected_folder: "This folder is protected and cannot be deleted.",
     error_protected_file: "This file is protected and cannot be deleted.",
     error_cannot_delete_protected_in_folder: 'Cannot delete folder because it contains protected file "{path}".',
@@ -200,6 +201,7 @@ const I18N = {
     meta_binary: "Бинарный файл",
     meta_modified: "{base} • изменён",
     meta_modified_short: "изменён",
+    confirm_revert_file: 'Отменить изменения в файле "{path}"?',
     error_protected_folder: "Эту папку нельзя удалить.",
     error_protected_file: "Этот файл нельзя удалить.",
     error_cannot_delete_protected_in_folder: 'Нельзя удалить папку, потому что в ней есть защищённый файл "{path}".',
@@ -1178,8 +1180,8 @@ function makeTextActionButton(label, title, onClick) {
   return button;
 }
 
-function getRecordMeta(record) {
-  return isDirtyRecord(record) ? t("meta_modified_short") : "";
+function getRecordMeta() {
+  return "";
 }
 
 function renderTree() {
@@ -2592,6 +2594,14 @@ function revertActiveFileChanges() {
   const record = state.files.get(state.activePath);
   if (!record) {
     return;
+  }
+
+  const hasRevertable = record.isNew || record.pathChanged || record.contentChanged;
+  if (hasRevertable && window.matchMedia("(max-width: 900px)").matches) {
+    const confirmed = window.confirm(t("confirm_revert_file", { path: state.activePath }));
+    if (!confirmed) {
+      return;
+    }
   }
 
   const activePath = state.activePath;
